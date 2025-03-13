@@ -1,4 +1,4 @@
-import { App, Editor, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Editor, Plugin, PluginSettingTab, Setting } from 'obsidian';
 
 // Remember to rename these classes and interfaces!
 
@@ -12,23 +12,9 @@ const DEFAULT_SETTINGS: AutoBulletSettings = {
 
 export default class AutoBulletPlugin extends Plugin {
 	settings: AutoBulletSettings;
-	statusBarItemEl: HTMLElement;
 
 	async onload() {
 		await this.loadSettings();
-
-		// This creates an icon in the left ribbon.
-		this.addRibbonIcon('list', 'Auto Bullet', (evt: MouseEvent) => {
-			// Toggle the enabled state when clicking the icon
-			this.settings.enabled = !this.settings.enabled;
-			this.saveSettings();
-			this.updateStatusBar();
-			new Notice(`Auto Bullet: ${this.settings.enabled ? '有効' : '無効'}`);
-		});
-		
-		// Add a status bar item to show the current state
-		this.statusBarItemEl = this.addStatusBarItem();
-		this.updateStatusBar();
 
 		// Register event to handle key presses
 		this.registerEvent(
@@ -61,10 +47,6 @@ export default class AutoBulletPlugin extends Plugin {
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new AutoBulletSettingTab(this.app, this));
-	}
-
-	updateStatusBar() {
-		this.statusBarItemEl.setText('Auto Bullet: ' + (this.settings.enabled ? '有効' : '無効'));
 	}
 
 	onunload() {
@@ -100,7 +82,6 @@ class AutoBulletSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.enabled)
 				.onChange(async (value) => {
 					this.plugin.settings.enabled = value;
-					this.plugin.updateStatusBar();
 					await this.plugin.saveSettings();
 				}));
 	}
