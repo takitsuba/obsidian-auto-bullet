@@ -4,8 +4,8 @@
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
 	"description": "行の先頭でスペースやタブを入力すると自動的に箇条書きを挿入します。",
-	"author": "User",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"author": "takitsuba",
+	"authorUrl": "https://github.com/takitsuba",
+	"fundingUrl": "",
 	"isDesktopOnly": false
 }
