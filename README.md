@@ -32,6 +32,10 @@ This plugin automatically inserts bullet points ("- ") when you type spaces or t
 
 For bug reports or feature requests, please use the GitHub Issues page.
 
+## Inspiration
+
+This plugin is inspired by the automatic bullet point feature in [Cosense](https://scrapbox.io).
+
 ## License
 
 Released under the MIT License.
