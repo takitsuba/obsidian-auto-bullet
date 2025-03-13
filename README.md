@@ -1,37 +1,37 @@
 # Obsidian Auto Bullet
 
-このプラグインは、Obsidianで行の先頭にスペースかタブを入力すると、自動的に箇条書き（「- 」）を挿入する機能を提供します。
+This plugin automatically inserts bullet points ("- ") when you type spaces or tabs at the beginning of a line in Obsidian.
 
-## 機能
+## Features
 
-- 行の先頭でスペースまたはタブを入力すると、自動的に箇条書き（「- 」）が挿入されます
-- 設定タブから機能のオン/オフを切り替えることができます
+- Automatically inserts bullet points ("- ") when you type spaces or tabs at the beginning of a line
+- You can toggle the feature on/off from the settings tab
 
-## 使い方
+## How to Use
 
-1. プラグインをインストールして有効化します
-2. 新しい行の先頭でスペースまたはタブを入力すると、自動的に「- 」が挿入されます
-3. 機能を無効にしたい場合は、設定タブから切り替えることができます
+1. Install and enable the plugin
+2. When you type a space or tab at the beginning of a new line, "- " will be automatically inserted
+3. If you want to disable the feature, you can toggle it from the settings tab
 
-## インストール方法
+## Installation
 
-### Obsidian内からのインストール（推奨）
+### Installation from within Obsidian (Recommended)
 
-1. Obsidianの設定を開きます
-2. 「サードパーティプラグイン」セクションに移動し、「コミュニティプラグイン」を選択します
-3. 「閲覧」をクリックし、「Auto Bullet」を検索します
-4. プラグインをインストールし、有効化します
+1. Open Obsidian settings
+2. Navigate to "Third-party plugins" section and select "Community plugins"
+3. Click "Browse" and search for "Auto Bullet"
+4. Install and enable the plugin
 
-### 手動インストール
+### Manual Installation
 
-1. リリースページから最新版をダウンロードします
-2. ダウンロードしたzipファイルを解凍し、フォルダを `.obsidian/plugins/` ディレクトリに配置します
-3. Obsidianを再起動し、設定から「サードパーティプラグイン」セクションでプラグインを有効化します
+1. Download the latest release from the releases page
+2. Extract the zip file and place the folder in the `.obsidian/plugins/` directory
+3. Restart Obsidian and enable the plugin in the "Third-party plugins" section of the settings
 
-## フィードバック
+## Feedback
 
-バグ報告や機能リクエストは、GitHubのIssueページからお願いします。
+For bug reports or feature requests, please use the GitHub Issues page.
 
-## ライセンス
+## License
 
-MITライセンスの下で公開されています。
+Released under the MIT License.

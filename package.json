@@ -1,7 +1,7 @@
 {
 	"name": "obsidian-auto-bullet",
 	"version": "1.0.0",
-	"description": "行の先頭でスペースやタブを入力すると自動的に箇条書きを挿入するObsidianプラグイン",
+	"description": "Automatically inserts bullet points when you type spaces or tabs at the beginning of a line.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
