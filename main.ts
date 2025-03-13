@@ -9,8 +9,8 @@ export default class AutoBulletPlugin extends Plugin {
 				const line = editor.getLine(cursor.line);
 				const lastChar = line.charAt(cursor.ch - 1);
 				
-				// Check if the last character typed was a space or tab
-				if (lastChar === ' ' || lastChar === '\t') {
+				// Check if the last character typed was a space (half-width or full-width) or tab
+				if (lastChar === ' ' || lastChar === '\t' || lastChar === '　') {
 					const textBeforeCursor = line.slice(0, cursor.ch);
 					
 					// Check if we're at the beginning of a line (only whitespace before cursor)
