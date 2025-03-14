@@ -7,5 +7,6 @@
 	"author": "takitsuba",
 	"authorUrl": "https://github.com/takitsuba",
 	"fundingUrl": "",
-	"isDesktopOnly": false
+	"isDesktopOnly": false,
+	"hasSettings": true
 }
