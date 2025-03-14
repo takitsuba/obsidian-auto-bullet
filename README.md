@@ -6,12 +6,23 @@ This plugin automatically inserts bullet points ("- ") when you type spaces or t
 
 - Automatically inserts bullet points ("- ") when you type spaces or tabs at the beginning of a line
 - You can toggle the feature on/off from the settings tab
+- Individual control for half-width spaces, full-width spaces, and tabs
 
 ## How to Use
 
 1. Install and enable the plugin
 2. When you type a space or tab at the beginning of a new line, "- " will be automatically inserted
 3. If you want to disable the feature, you can toggle it from the settings tab
+
+## Settings
+
+You can customize the plugin behavior through the settings tab:
+
+- **Half-width Space**: Enable/disable automatic bullet points when pressing a half-width space at the beginning of a line
+- **Full-width Space**: Enable/disable automatic bullet points when pressing a full-width space at the beginning of a line
+- **Tab**: Enable/disable automatic bullet points when pressing a tab at the beginning of a line
+
+All options are enabled by default.
 
 ## Installation
 
