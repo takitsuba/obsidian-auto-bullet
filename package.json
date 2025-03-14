@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-auto-bullet",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Automatically inserts bullet points when you type spaces or tabs at the beginning of a line.",
 	"main": "main.js",
 	"scripts": {
@@ -8,7 +8,13 @@
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"version": "node version-bump.mjs && git add manifest.json versions.json"
 	},
-	"keywords": ["obsidian", "plugin", "bullet", "markdown", "list"],
+	"keywords": [
+		"obsidian",
+		"plugin",
+		"bullet",
+		"markdown",
+		"list"
+	],
 	"author": "",
 	"license": "MIT",
 	"devDependencies": {
