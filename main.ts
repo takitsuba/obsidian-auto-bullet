@@ -80,8 +80,6 @@ class AutoBulletSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', { text: 'Auto Bullet Settings' });
-
 		new Setting(containerEl)
 			.setName('Half-width Space')
 			.setDesc('Insert bullet points when you press a half-width space at the beginning of a line')
