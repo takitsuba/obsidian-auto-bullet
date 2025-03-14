@@ -1,5 +1,5 @@
 {
-	"name": "obsidian-auto-bullet",
+	"name": "auto-bullet",
 	"version": "1.0.1",
 	"description": "Automatically inserts bullet points when you type spaces or tabs at the beginning of a line.",
 	"main": "main.js",
