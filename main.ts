@@ -43,15 +43,19 @@ export default class AutoBulletPlugin extends Plugin {
 
 			// Check if we're at the beginning of a line (only whitespace before cursor)
 			if (textBeforeCursor.trim() === '') {
-				// Insert a bullet point
-				const bulletPoint = "- ";
-				editor.replaceRange(bulletPoint,
-					{ line: cursor.line, ch: 0 },
-					{ line: cursor.line, ch: textBeforeCursor.length }
-				);
+				// Check if the line already has a bullet point
+				const lineWithoutWhitespace = line.trim();
+				if (!lineWithoutWhitespace.startsWith('- ')) {
+					// Insert a bullet point
+					const bulletPoint = "- ";
+					editor.replaceRange(bulletPoint,
+						{ line: cursor.line, ch: 0 },
+						{ line: cursor.line, ch: textBeforeCursor.length }
+					);
 
-				// Move cursor after the bullet point
-				editor.setCursor({ line: cursor.line, ch: bulletPoint.length });
+					// Move cursor after the bullet point
+					editor.setCursor({ line: cursor.line, ch: bulletPoint.length });
+				}
 			}
 		}
 	}
