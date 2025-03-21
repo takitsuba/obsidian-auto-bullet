@@ -1,15 +1,32 @@
-import { Editor, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { Editor, Plugin, PluginSettingTab, Setting, Notice, MarkdownView } from 'obsidian';
+
+// CodeMirror type definitions
+interface CodeMirrorEditor {
+	getCursor(): { line: number; ch: number };
+	getLine(line: number): string;
+	setCursor(pos: { line: number; ch: number }): void;
+	on(event: string, callback: (cm: CodeMirrorEditor, event: KeyboardEvent) => void): void;
+}
+
+// Extended type definition for Obsidian Plugin
+declare module 'obsidian' {
+	interface Plugin {
+		registerCodeMirror(callback: (cm: CodeMirrorEditor) => void): void;
+	}
+}
 
 interface AutoBulletSettings {
 	enableHalfWidthSpace: boolean;
 	enableFullWidthSpace: boolean;
 	enableTab: boolean;
+	customizeHomeKey: boolean;
 }
 
 const DEFAULT_SETTINGS: AutoBulletSettings = {
 	enableHalfWidthSpace: true,
 	enableFullWidthSpace: true,
-	enableTab: true
+	enableTab: true,
+	customizeHomeKey: true
 };
 
 export default class AutoBulletPlugin extends Plugin {
@@ -26,6 +43,98 @@ export default class AutoBulletPlugin extends Plugin {
 		this.registerEvent(
 			this.app.workspace.on('editor-change', this.handleEditorChange)
 		);
+
+		// Add a command that can be triggered from the command palette
+		this.addCommand({
+			id: 'move-cursor-after-bullet',
+			name: 'Move cursor after bullet point',
+			editorCallback: (editor: Editor) => {
+				const cursor = editor.getCursor();
+				const line = editor.getLine(cursor.line);
+
+				// バレットポイントの行の場合は「- 」の後ろにカーソルを移動
+				if (line.trim().startsWith('- ')) {
+					this.moveCursorAfterBullet(editor);
+				} else {
+					// 通常の行の場合は行の先頭にカーソルを移動（標準のCtrl+Aと同様）
+					editor.setCursor({ line: cursor.line, ch: 0 });
+				}
+			},
+			hotkeys: [
+				{
+					modifiers: ['Ctrl'],
+					key: 'a',
+				}
+			]
+		});
+
+		// Try another approach with CodeMirror
+		this.registerCodeMirror((cm: CodeMirrorEditor) => {
+			cm.on('keydown', (instance, event) => {
+				try {
+					// Handle Ctrl+A
+					if (event.key === 'a' && event.ctrlKey && !event.metaKey && this.settings.customizeHomeKey) {
+						const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+						if (view) {
+							const editor = view.editor;
+							const cursor = editor.getCursor();
+							const line = editor.getLine(cursor.line);
+
+							// バレットポイントの行の場合は「- 」の後ろにカーソルを移動
+							if (line.trim().startsWith('- ')) {
+								const result = this.moveCursorAfterBullet(editor);
+								if (result) {
+									// Only prevent default if we successfully moved the cursor
+									event.preventDefault();
+									event.stopPropagation();
+									return false;
+								}
+							} else {
+								// 通常の行の場合は行の先頭にカーソルを移動
+								editor.setCursor({ line: cursor.line, ch: 0 });
+								event.preventDefault();
+								event.stopPropagation();
+								return false;
+							}
+						}
+					}
+				} catch (error) {
+					new Notice(`Error: ${error.message}`);
+				}
+			});
+		});
+	}
+
+	// Function to move cursor after bullet point
+	moveCursorAfterBullet(editor: Editor) {
+		try {
+			const cursor = editor.getCursor();
+			const line = editor.getLine(cursor.line);
+
+			// Check if the line is a bullet point
+			if (line.trim().startsWith('- ')) {
+				// Find index after leading whitespace
+				let indentIndex = 0;
+				while (indentIndex < line.length &&
+					(line[indentIndex] === ' ' || line[indentIndex] === '\t' || line[indentIndex] === '　')) {
+					indentIndex++;
+				}
+
+				// Calculate position after the '- ' bullet point
+				if (line.substring(indentIndex).startsWith('- ')) {
+					const bulletEndPosition = indentIndex + 2; // Length of '- ' is 2
+
+					// Move cursor only if it's not already at the bullet end position
+					if (cursor.ch !== bulletEndPosition) {
+						editor.setCursor({ line: cursor.line, ch: bulletEndPosition });
+						return true;
+					}
+				}
+			}
+		} catch (error) {
+			console.error(`Error in moveCursorAfterBullet: ${error.message}`);
+		}
+		return false;
 	}
 
 	private handleEditorChange = (editor: Editor) => {
@@ -115,5 +224,16 @@ class AutoBulletSettingTab extends PluginSettingTab {
 					this.plugin.settings.enableTab = value;
 					await this.plugin.saveSettings();
 				}));
+
+		new Setting(containerEl)
+			.setName('Customize Home Key')
+			.setDesc('Move cursor after bullet point (- ) when pressing Home or Ctrl+A in a bullet line')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.customizeHomeKey)
+				.onChange(async (value) => {
+					this.plugin.settings.customizeHomeKey = value;
+					await this.plugin.saveSettings();
+				}));
 	}
 }
+
