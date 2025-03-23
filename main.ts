@@ -166,6 +166,14 @@ export default class AutoBulletPlugin extends Plugin {
 			return;
 		}
 
+		// Check if the line is a heading
+		const isHeading = line.trim().startsWith('#');
+
+		// If the line is a heading, do not add bullet points
+		if (isHeading) {
+			return;
+		}
+
 		// Check if the last character typed was a space (half-width or full-width) or tab
 		// and if the corresponding setting is enabled
 		if ((lastChar === ' ' && this.settings.enableHalfWidthSpace) ||
