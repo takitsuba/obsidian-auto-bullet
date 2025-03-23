@@ -145,17 +145,24 @@ export default class AutoBulletPlugin extends Plugin {
 		// Check if the cursor is inside a code block
 		const isInCodeBlock = (line: string) => line.trim().startsWith('```');
 
-		// Check if the current line or any previous line is a code block
+		// Check if the cursor is inside a math block
+		const isInMathBlock = (line: string) => line.trim().startsWith('$$');
+
+		// Check if the current line or any previous line is a code block or math block
 		let inCodeBlock = false;
+		let inMathBlock = false;
 		for (let i = 0; i <= cursor.line; i++) {
 			const currentLine = editor.getLine(i);
 			if (isInCodeBlock(currentLine)) {
 				inCodeBlock = !inCodeBlock;
 			}
+			if (isInMathBlock(currentLine)) {
+				inMathBlock = !inMathBlock;
+			}
 		}
 
-		// If inside a code block or the current line is a code block end, do not add bullet points
-		if (inCodeBlock || isInCodeBlock(line)) {
+		// If inside a code block, math block, or the current line is a code block or math block end, do not add bullet points
+		if (inCodeBlock || inMathBlock || isInCodeBlock(line) || isInMathBlock(line)) {
 			return;
 		}
 
