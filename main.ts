@@ -174,6 +174,22 @@ export default class AutoBulletPlugin extends Plugin {
 			return;
 		}
 
+		// Check if the line is a blockquote (starts with '>')
+		const isBlockquote = line.trim().startsWith('>');
+
+		// If the line is a blockquote, do not add bullet points
+		if (isBlockquote) {
+			return;
+		}
+
+		// Check if the line is a numbered list (starts with a number followed by a period and space)
+		const isNumberedList = /^\s*\d+\.\s/.test(line);
+
+		// If the line is a numbered list, do not add bullet points
+		if (isNumberedList) {
+			return;
+		}
+
 		// Check if the last character typed was a space (half-width or full-width) or tab
 		// and if the corresponding setting is enabled
 		if ((lastChar === ' ' && this.settings.enableHalfWidthSpace) ||
