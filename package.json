@@ -1,6 +1,6 @@
 {
 	"name": "auto-bullet",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "Automatically inserts bullet points when you type spaces or tabs at the beginning of a line.",
 	"main": "main.js",
 	"scripts": {
