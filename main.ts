@@ -142,6 +142,23 @@ export default class AutoBulletPlugin extends Plugin {
 		const line = editor.getLine(cursor.line);
 		const lastChar = line.charAt(cursor.ch - 1);
 
+		// Check if the cursor is inside a code block
+		const isInCodeBlock = (line: string) => line.trim().startsWith('```');
+
+		// Check if the current line or any previous line is a code block
+		let inCodeBlock = false;
+		for (let i = 0; i <= cursor.line; i++) {
+			const currentLine = editor.getLine(i);
+			if (isInCodeBlock(currentLine)) {
+				inCodeBlock = !inCodeBlock;
+			}
+		}
+
+		// If inside a code block or the current line is a code block end, do not add bullet points
+		if (inCodeBlock || isInCodeBlock(line)) {
+			return;
+		}
+
 		// Check if the last character typed was a space (half-width or full-width) or tab
 		// and if the corresponding setting is enabled
 		if ((lastChar === ' ' && this.settings.enableHalfWidthSpace) ||
