@@ -6,7 +6,5 @@
 	"description": "Automatically inserts bullet points when you type spaces or tabs at the beginning of a line.",
 	"author": "takitsuba",
 	"authorUrl": "https://github.com/takitsuba",
-	"fundingUrl": "",
-	"isDesktopOnly": false,
-	"hasSettings": true
+	"isDesktopOnly": false
 }

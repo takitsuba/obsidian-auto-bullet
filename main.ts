@@ -196,7 +196,7 @@ class AutoBulletSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		new Setting(containerEl)
-			.setName('Half-width Space')
+			.setName('Half-width space')
 			.setDesc('Insert bullet points when you press a half-width space at the beginning of a line')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.enableHalfWidthSpace)
@@ -206,7 +206,7 @@ class AutoBulletSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('Full-width Space')
+			.setName('Full-width space')
 			.setDesc('Insert bullet points when you press a full-width space at the beginning of a line')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.enableFullWidthSpace)
@@ -226,7 +226,7 @@ class AutoBulletSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('Customize Home Key')
+			.setName('Customize home key')
 			.setDesc('Move cursor after bullet point (- ) when pressing Home or Ctrl+A in a bullet line')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.customizeHomeKey)

@@ -1,4 +1,4 @@
-# Obsidian Auto Bullet
+# Auto Bullet
 
 This plugin automatically inserts bullet points ("- ") when you type spaces or tabs at the beginning of a line in Obsidian.
 
@@ -49,4 +49,4 @@ This plugin is inspired by the automatic bullet point feature in [Cosense](https
 
 ## License
 
-Released under the MIT License.
+See [LICENSE](LICENSE).
