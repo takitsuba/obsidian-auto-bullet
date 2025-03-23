@@ -190,6 +190,16 @@ export default class AutoBulletPlugin extends Plugin {
 			return;
 		}
 
+		// Check if the line is a table row (using a more precise regex pattern for Markdown tables)
+		// Markdown tables typically have | characters at the beginning/end of the line or multiple | characters
+		const isTableRow = /^\s*\|.*\|\s*$/.test(line) || // Line has | at beginning and end
+			/\|.*\|/.test(line.trim()); // Line has at least two | characters after trimming
+
+		// If the line is a table row, do not add bullet points
+		if (isTableRow) {
+			return;
+		}
+
 		// Check if the last character typed was a space (half-width or full-width) or tab
 		// and if the corresponding setting is enabled
 		if ((lastChar === ' ' && this.settings.enableHalfWidthSpace) ||
