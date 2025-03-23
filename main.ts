@@ -200,6 +200,14 @@ export default class AutoBulletPlugin extends Plugin {
 			return;
 		}
 
+		// Check if the line is a horizontal rule (---, ***, ___)
+		const isHorizontalRule = /^\s*([-]{3,}|[*]{3,}|[_]{3,})\s*$/.test(line);
+
+		// If the line is a horizontal rule, do not add bullet points
+		if (isHorizontalRule) {
+			return;
+		}
+
 		// Check if the last character typed was a space (half-width or full-width) or tab
 		// and if the corresponding setting is enabled
 		if ((lastChar === ' ' && this.settings.enableHalfWidthSpace) ||
