@@ -1,19 +1,5 @@
-import { Editor, Plugin, PluginSettingTab, Setting, Notice, MarkdownView } from 'obsidian';
+import { Editor, Plugin, PluginSettingTab, Setting } from 'obsidian';
 
-// CodeMirror type definitions
-interface CodeMirrorEditor {
-	getCursor(): { line: number; ch: number };
-	getLine(line: number): string;
-	setCursor(pos: { line: number; ch: number }): void;
-	on(event: string, callback: (cm: CodeMirrorEditor, event: KeyboardEvent) => void): void;
-}
-
-// Extended type definition for Obsidian Plugin
-declare module 'obsidian' {
-	interface Plugin {
-		registerCodeMirror(callback: (cm: CodeMirrorEditor) => void): void;
-	}
-}
 
 interface AutoBulletSettings {
 	enableHalfWidthSpace: boolean;
@@ -59,50 +45,9 @@ export default class AutoBulletPlugin extends Plugin {
 					// 通常の行の場合は行の先頭にカーソルを移動（標準のCtrl+Aと同様）
 					editor.setCursor({ line: cursor.line, ch: 0 });
 				}
-			},
-			hotkeys: [
-				{
-					modifiers: ['Ctrl'],
-					key: 'a',
-				}
-			]
+			}
 		});
 
-		// Try another approach with CodeMirror
-		this.registerCodeMirror((cm: CodeMirrorEditor) => {
-			cm.on('keydown', (instance, event) => {
-				try {
-					// Handle Ctrl+A
-					if (event.key === 'a' && event.ctrlKey && !event.metaKey && this.settings.customizeHomeKey) {
-						const view = this.app.workspace.getActiveViewOfType(MarkdownView);
-						if (view) {
-							const editor = view.editor;
-							const cursor = editor.getCursor();
-							const line = editor.getLine(cursor.line);
-
-							// バレットポイントの行の場合は「- 」の後ろにカーソルを移動
-							if (line.trim().startsWith('- ')) {
-								const result = this.moveCursorAfterBullet(editor);
-								if (result) {
-									// Only prevent default if we successfully moved the cursor
-									event.preventDefault();
-									event.stopPropagation();
-									return false;
-								}
-							} else {
-								// 通常の行の場合は行の先頭にカーソルを移動
-								editor.setCursor({ line: cursor.line, ch: 0 });
-								event.preventDefault();
-								event.stopPropagation();
-								return false;
-							}
-						}
-					}
-				} catch (error) {
-					new Notice(`Error: ${error.message}`);
-				}
-			});
-		});
 	}
 
 	// Function to move cursor after bullet point
