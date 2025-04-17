@@ -38,11 +38,11 @@ export default class AutoBulletPlugin extends Plugin {
 				const cursor = editor.getCursor();
 				const line = editor.getLine(cursor.line);
 
-				// バレットポイントの行の場合は「- 」の後ろにカーソルを移動
+				// If this is a bullet point line, move the cursor after the bullet (- )
 				if (line.trim().startsWith('- ')) {
 					this.moveCursorAfterBullet(editor);
 				} else {
-					// 通常の行の場合は行の先頭にカーソルを移動（標準のCtrl+Aと同様）
+					// For normal lines, move cursor to the beginning of the line (similar to standard Ctrl+A behavior)
 					editor.setCursor({ line: cursor.line, ch: 0 });
 				}
 			}
