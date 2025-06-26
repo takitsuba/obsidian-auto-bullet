@@ -207,3 +207,128 @@ describe('AutoBullet機能のテスト', () => {
     expect(mockEditor.getCurrentContent()[0]).toBe('-  ');
   });
 });
+
+// 番号付きリストのHome key機能テスト
+describe('番号付きリストのHome key機能テスト', () => {
+  let mockEditor: MockEditor;
+
+  // moveCursorAfterNumberedListの実装（main.tsから抽出）
+  function moveCursorAfterNumberedList(editor: Editor) {
+    try {
+      const cursor = editor.getCursor();
+      const line = editor.getLine(cursor.line);
+
+      // Check if the line is a numbered list
+      const match = line.match(/^(\s*)(\d+\.\s)/);
+      if (match) {
+        const indentLength = match[1].length;
+        const numberPartLength = match[2].length;
+        const targetPosition = indentLength + numberPartLength;
+
+        // Move cursor only if it's not already at the target position
+        if (cursor.ch !== targetPosition) {
+          editor.setCursor({ line: cursor.line, ch: targetPosition });
+          return true;
+        }
+      }
+    } catch (error) {
+      console.error(`Error in moveCursorAfterNumberedList: ${error.message}`);
+    }
+    return false;
+  }
+
+  beforeEach(() => {
+    mockEditor = new MockEditor();
+  });
+
+  test('基本的な番号付きリストでカーソルが正しい位置に移動する', () => {
+    // 番号付きリストを設定
+    mockEditor = new MockEditor(['1. テストアイテム']);
+    mockEditor.setCursor({ line: 0, ch: 0 }); // 行の先頭にカーソル
+
+    // 関数を実行
+    const result = moveCursorAfterNumberedList(mockEditor as unknown as Editor);
+
+    // カーソルが「1. 」の後に移動したことを確認
+    expect(result).toBe(true);
+    expect(mockEditor.getCursor()).toEqual({ line: 0, ch: 3 });
+  });
+
+  test('インデントありの番号付きリストでカーソルが正しい位置に移動する', () => {
+    // インデントありの番号付きリストを設定
+    mockEditor = new MockEditor(['    2. インデントされたアイテム']);
+    mockEditor.setCursor({ line: 0, ch: 0 }); // 行の先頭にカーソル
+
+    // 関数を実行
+    const result = moveCursorAfterNumberedList(mockEditor as unknown as Editor);
+
+    // カーソルが「    2. 」の後に移動したことを確認
+    expect(result).toBe(true);
+    expect(mockEditor.getCursor()).toEqual({ line: 0, ch: 7 });
+  });
+
+  test('タブインデントの番号付きリストでカーソルが正しい位置に移動する', () => {
+    // タブインデントの番号付きリストを設定
+    mockEditor = new MockEditor(['\t10. タブインデントアイテム']);
+    mockEditor.setCursor({ line: 0, ch: 0 }); // 行の先頭にカーソル
+
+    // 関数を実行
+    const result = moveCursorAfterNumberedList(mockEditor as unknown as Editor);
+
+    // カーソルが「\t10. 」の後に移動したことを確認
+    expect(result).toBe(true);
+    expect(mockEditor.getCursor()).toEqual({ line: 0, ch: 5 });
+  });
+
+  test('既に正しい位置にカーソルがある場合は移動しない', () => {
+    // 番号付きリストを設定
+    mockEditor = new MockEditor(['3. アイテム']);
+    mockEditor.setCursor({ line: 0, ch: 3 }); // すでに正しい位置にカーソル
+
+    // 関数を実行
+    const result = moveCursorAfterNumberedList(mockEditor as unknown as Editor);
+
+    // カーソルが移動しないことを確認
+    expect(result).toBe(false);
+    expect(mockEditor.getCursor()).toEqual({ line: 0, ch: 3 });
+  });
+
+  test('番号付きリストでない行では何もしない', () => {
+    // 通常のテキストを設定
+    mockEditor = new MockEditor(['これは番号付きリストではありません']);
+    mockEditor.setCursor({ line: 0, ch: 0 });
+
+    // 関数を実行
+    const result = moveCursorAfterNumberedList(mockEditor as unknown as Editor);
+
+    // 何も変更されないことを確認
+    expect(result).toBe(false);
+    expect(mockEditor.getCursor()).toEqual({ line: 0, ch: 0 });
+  });
+
+  test('箇条書きリスト（- ）では何もしない', () => {
+    // 箇条書きリストを設定
+    mockEditor = new MockEditor(['- 箇条書きアイテム']);
+    mockEditor.setCursor({ line: 0, ch: 0 });
+
+    // 関数を実行
+    const result = moveCursorAfterNumberedList(mockEditor as unknown as Editor);
+
+    // 何も変更されないことを確認
+    expect(result).toBe(false);
+    expect(mockEditor.getCursor()).toEqual({ line: 0, ch: 0 });
+  });
+
+  test('複数桁の番号でカーソルが正しい位置に移動する', () => {
+    // 複数桁の番号付きリストを設定
+    mockEditor = new MockEditor(['123. 大きな番号のアイテム']);
+    mockEditor.setCursor({ line: 0, ch: 0 });
+
+    // 関数を実行
+    const result = moveCursorAfterNumberedList(mockEditor as unknown as Editor);
+
+    // カーソルが「123. 」の後に移動したことを確認
+    expect(result).toBe(true);
+    expect(mockEditor.getCursor()).toEqual({ line: 0, ch: 5 });
+  });
+});
