@@ -41,6 +41,9 @@ export default class AutoBulletPlugin extends Plugin {
 				// If this is a bullet point line, move the cursor after the bullet (- )
 				if (line.trim().startsWith('- ')) {
 					this.moveCursorAfterBullet(editor);
+				} else if (/^\s*\d+\.\s/.test(line)) {
+					// If this is a numbered list, move the cursor after the number and dot
+					this.moveCursorAfterNumberedList(editor);
 				} else {
 					// For normal lines, move cursor to the beginning of the line (similar to standard Ctrl+A behavior)
 					editor.setCursor({ line: cursor.line, ch: 0 });
@@ -78,6 +81,31 @@ export default class AutoBulletPlugin extends Plugin {
 			}
 		} catch (error) {
 			console.error(`Error in moveCursorAfterBullet: ${error.message}`);
+		}
+		return false;
+	}
+
+	// Function to move cursor after numbered list
+	moveCursorAfterNumberedList(editor: Editor) {
+		try {
+			const cursor = editor.getCursor();
+			const line = editor.getLine(cursor.line);
+
+			// Check if the line is a numbered list
+			const match = line.match(/^(\s*)(\d+\.\s)/);
+			if (match) {
+				const indentLength = match[1].length;
+				const numberPartLength = match[2].length;
+				const targetPosition = indentLength + numberPartLength;
+
+				// Move cursor only if it's not already at the target position
+				if (cursor.ch !== targetPosition) {
+					editor.setCursor({ line: cursor.line, ch: targetPosition });
+					return true;
+				}
+			}
+		} catch (error) {
+			console.error(`Error in moveCursorAfterNumberedList: ${error.message}`);
 		}
 		return false;
 	}
